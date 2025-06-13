@@ -1,0 +1,37 @@
+protoClass: com.example.demo.proto.CopBalances
+fields:
+  accountIdentifier.accountid:
+    source: csv
+    csvColumn: account_id
+    type: string
+
+  businessDate:
+    source: csv
+    csvColumn: business_date
+    defaultValue: "20230101"
+    type: int32
+
+  exchangeName:
+    source: hardcoded
+    value: NSE
+    type: string
+
+  tradeDetails.tradeId:
+    source: csv
+    csvColumn: trade_id
+    type: string
+
+  tradeDetails.nestedTradeInfo.securityCode:
+    source: csv
+    csvColumn: security
+    type: string
+
+  tradeDetails.nestedTradeInfo.quantity:
+    source: csv
+    csvColumn: qty
+    type: double
+
+  status:
+    source: csv
+    csvColumn: status_csv
+    type: enum

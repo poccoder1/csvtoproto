@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_package = "com.example.demo.proto";
+option java_multiple_files = true;
+
+package com.example.proto;
+
+message CopBalances {
+AccountIdentifier accountIdentifier = 1;
+int32 businessDate = 2;
+string exchangeName = 3;
+TradeDetails tradeDetails = 4;
+Status status = 5;
+}
+
+message AccountIdentifier {
+string accountid = 1;
+}
+
+message TradeDetails {
+string tradeId = 1;
+NestedTradeInfo nestedTradeInfo = 2;
+}
+
+message NestedTradeInfo {
+string securityCode = 1;
+double quantity = 2;
+}
+
+enum Status {
+UNKNOWN = 0;
+NEW = 1;
+PROCESSED = 2;
+FAILED = 3;
+}
