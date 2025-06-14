@@ -24,6 +24,13 @@ public class ProtoParquetWriterService {
             Path path = new Path(outputFilePath);
             Configuration conf = new Configuration();
 
+            // Check if file exists and delete it
+            org.apache.hadoop.fs.FileSystem fs = path.getFileSystem(conf);
+            if (fs.exists(path)) {
+                fs.delete(path, false); // false = non-recursive
+                System.out.println("Deleted existing Parquet file: " + outputFilePath);
+            }
+
             try (ParquetWriter<Message> writer = ProtoParquetWriter
                     .<Message>builder(path)
                     .withMessage(protoClass)
@@ -42,5 +49,6 @@ public class ProtoParquetWriterService {
             throw new RuntimeException("Failed to write proto to Parquet", e);
         }
     }
+
 }
 
