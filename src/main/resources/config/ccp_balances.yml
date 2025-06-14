@@ -1,4 +1,4 @@
-protoClass: com.example.demo.proto.CopBalances
+protoClass: com.example.demo.proto.CcpBalances
 fields:
   accountIdentifier.accountid:
     source: csv
@@ -35,3 +35,12 @@ fields:
     source: csv
     csvColumn: status_csv
     type: enum
+
+  tradeDetails.tradeKey:
+    source: function
+    function:
+      className: com.example.demo.util.UtilityFunctions
+      method: generateTradeKey
+      params:
+        - account_id
+        - qty

@@ -39,6 +39,8 @@ public class CsvToProtoService {
 
             List<String> jsonResults = new ArrayList<>();
 
+            List<Message> protoMessages = new ArrayList<>();
+
             for (CSVRecord record : parser) {
                 DynamicMessage.Builder builder = DynamicMessage.newBuilder(descriptor);
 
@@ -58,7 +60,7 @@ public class CsvToProtoService {
                             value = fieldMapping.getValue();
                             break;
                         case "function":
-                            value = UtilityFunctions.execute(fieldMapping.getValue(), record); // Your custom function logic
+                            value = UtilityFunctions.invokeDynamicFunction(fieldMapping.getFunction(), record);
                             break;
                         default:
                             throw new IllegalArgumentException("Unknown source type: " + fieldMapping.getSource());
@@ -68,8 +70,16 @@ public class CsvToProtoService {
                 }
 
                 Message msg = builder.build();
+                protoMessages.add(msg);
                 jsonResults.add(JsonFormat.printer().print(msg));
             }
+
+            // Write to Parquet using proto message type
+            ProtoParquetWriterService.writeToParquet(
+                    protoMessages,
+                    (Class<? extends Message>) protoClass,
+                    "output/ccp_balances.parquet"
+            );
 
             return jsonResults;
 
